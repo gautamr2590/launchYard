@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Launchyard</title>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="js/launchyard.js"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+
+</head>
+
+
+
+<body>
+<div class="col-md-12"><br>
+	<div class="col-md-4 col-md-offset-4">
+		<div class="panel panel-primary">
+			<div class="panel-heading text-center">Employee Database
+				<a href="" class="btn btn-default btn-xs pull-right" id="add-new" data-toggle="modal" data-target="#new-entry">Add Entry</a></div>
+			<div class="panel-body">
+				<input type="text" placeholder="Search by Name" class="form-control" id="search_entry" onkeyup="Search()"><br>
+				<div id="panel-emp"></div>
+				<div id="panel-search"></div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="new-entry">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Add New Entry</h4>
+				</div>
+				<div class="modal-body">
+					<span id="username_error"></span>
+					<input type="text" class="form-control" id="newUser" placeholder="Enter name"><br>
+					<span id="designation_error"></span>
+					<input type="text" class="form-control" id="newDesignation" placeholder="Enter Designation">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" onclick="addEntry()">Submit</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+
+
+
+<script type="text/javascript">
+document.getElementById('add-new').style.display = "none";
+
+//Function to sort alphabetically
+function sortByKey(array, key) {
+    return array.sort(function(a, b) {
+        var x = a[key]; var y = b[key];
+        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+    });
+}
+launchYard = sortByKey(launchYard, 'name');
+console.log(launchYard);
+
+
+//Function to populate JSON to list
+function displayList(arr) {
+  var out = "";
+  var i;
+  for (i = 0; i < arr.length; i++) {
+    out += '<div class="media"> <div class="media-left"> <a href="#"> <img class="media-object" src="' + arr[i].avatar + '" alt="..." width=75px> </a> </div><div class="media-body"> <h4 class="media-heading">' + arr[i].name + '</h4> <p>'+ arr[i].designation +'</p></div></div>';
+  }
+  document.getElementById('panel-emp').innerHTML = out;
+}
+displayList(launchYard);
+
+
+//Function to search
+function Search() {
+	document.getElementById('panel-emp').style.display = "none";
+	document.getElementById('add-new').style.display = "none";
+	var searchItem = document.getElementById('search_entry').value;
+	var searched = [];
+	var out2 = "";
+	// console.log(typeof searchItem);
+	for (var i = 0; i < launchYard.length; i++) {
+		// console.log(launchYard[i].name);
+		// console.log(searchItem);
+		if (launchYard[i].name.startsWith(searchItem) || launchYard[i].designation.startsWith(searchItem)) {
+			searched.push(launchYard[i])
+		} else {
+			document.getElementById('add-new').style.display = "block";
+		}
+	};
+	// console.log(searched);
+	for (var i = 0; i < searched.length; i++) {
+		 out2 += '<div class="media"> <div class="media-left">  <a href="#"> <img class="media-object" src="http://coenraets.org/apps/angular-directory/pics/james_king.jpg" alt="..." width=75px> </a> </div><div class="media-body"> <h4 class="media-heading">' + searched[i].name + '</h4> <p>'+ searched[i].designation +'</p></div></div>';	
+	};
+	console.log(out2);
+	document.getElementById('panel-search').innerHTML = out2;
+	return searched;
+}
+
+
+// Function to add new entry
+function addEntry() {
+	var newAvatar = "http://coenraets.org/apps/angular-directory/pics/james_king.jpg";
+	var newName = document.getElementById("newUser").value;
+	var newDesg = document.getElementById("newDesignation").value;
+
+	if (newName.length > 0 && newDesg.length>0) {
+		var newObj = {
+		    "avatar" : newAvatar,  
+		    "name" : newName,   
+		    "designation": newDesg 
+		};
+		launchYard.push( newObj );
+		displayList(launchYard);
+		$('#new-entry').modal('hide');
+
+	} else {
+		document.getElementById('username_error').innerHTML = "Please enter username";
+		document.getElementById('designation_error').innerHTML = "Please enter designation.";
+	}
+}
+
+</script>
+</html>
+
+
+
