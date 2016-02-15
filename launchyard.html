@@ -79,14 +79,14 @@ displayList(launchYard);
 function Search() {
 	document.getElementById('panel-emp').style.display = "none";
 	document.getElementById('add-new').style.display = "none";
-	var searchItem = document.getElementById('search_entry').value;
+	var typedsearch = document.getElementById('search_entry').value;
+	var searchItem = typedsearch.toLowerCase();
 	var searched = [];
 	var out2 = "";
 	// console.log(typeof searchItem);
 	for (var i = 0; i < launchYard.length; i++) {
-		// console.log(launchYard[i].name);
-		// console.log(searchItem);
-		if (launchYard[i].name.startsWith(searchItem) || launchYard[i].designation.startsWith(searchItem)) {
+		console.log(launchYard[i].name.toLowerCase().startsWith(searchItem));
+		if (launchYard[i].name.toLowerCase().startsWith(searchItem) || launchYard[i].designation.toLowerCase().startsWith(searchItem)) {
 			searched.push(launchYard[i])
 		} else {
 			document.getElementById('add-new').style.display = "block";
@@ -96,7 +96,7 @@ function Search() {
 	for (var i = 0; i < searched.length; i++) {
 		 out2 += '<div class="media"> <div class="media-left">  <a href="#"> <img class="media-object" src="http://coenraets.org/apps/angular-directory/pics/james_king.jpg" alt="..." width=75px> </a> </div><div class="media-body"> <h4 class="media-heading">' + searched[i].name + '</h4> <p>'+ searched[i].designation +'</p></div></div>';	
 	};
-	console.log(out2);
+	// console.log(out2);
 	document.getElementById('panel-search').innerHTML = out2;
 	return searched;
 }
